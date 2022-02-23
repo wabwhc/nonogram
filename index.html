@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nonogram</title>
+    <style>
+        * {
+            margin: 0;
+        }
+        html, body{
+            width: 100%;
+            height: 100%;
+        }
+
+        button {
+            position: absolute;
+            border-inline-start-width: solid 2px;
+        }
+        div {
+            display: inline;
+            position: absolute;
+            font-size: auto;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        //각 칸은 버튼이고 눌리면 색이 변함
+        //로직 가로 세로 개수;
+        const x = 10;
+        const y = 10;
+        //보드 길이
+        const width = (document.body.clientWidth / 2);
+        const height = (document.body.clientHeight / 2);
+        const startX = document.body.clientWidth / 4;
+        const startY = document.body.clientHeight / 4;
+        //버튼 길이
+        const btnW = width / x;
+        const btnH = height / y;
+        const hintW = startX / (x / 2);
+        const hintH = startY / (y / 2);
+        //빈 배열만들기
+        const board = [];
+        const Player = [];
+        for(let i = 0; i < y; i++){
+            board[i] = [];
+            Player[i] = [];
+        }
+        //색칠할 부분 정하기
+        for(let i = 0; i < y; i++){
+            for(let j = 0; j < x; j++){
+                board[i][j] = Math.random() > 0.5 ? true : false;
+            }
+        }
+        console.log(board)
+        for(let i = 0; i < x; i++){
+            let a = 0;
+            let b = []
+            for(let j = 0; j < y; j++){
+                if(board[j][i] === false){
+                    a += 1;
+                }else if(a !== 0){
+                    b.push(a)
+                    a = 0;
+                }
+            }
+            if(a !== 0){
+                b.push(a)
+                a = 0;
+            }
+            let jjj = 0;
+            for(let j = b.length; j > 0; j--){
+                let k = document.createElement('div');
+                k.innerText = b[0 + jjj];
+                jjj += 1;
+                k.style.top = startY - (hintH * j) + "px";
+                k.style.left = startX + (btnW * i) + "px";
+                document.body.appendChild(k)
+            }
+        }
+
+        for(let i = 0; i < y; i++){
+            let a = 0;
+            let b = [];
+            for(let j = 0; j < x; j++){
+                if(board[i][j] === false){
+                    a += 1;
+                }else if(a !== 0){
+                    b.push(a)
+                    a = 0;
+                }
+            }
+            if(a !== 0){
+                b.push(a)
+                a = 0;
+            }
+            let jjj = 0
+            for(let j = b.length; j > 0; j--){
+                let k = document.createElement('div');
+                k.innerText = b[jjj]
+                jjj += 1;
+                k.style.top = startY + (btnH * i) + "px";
+                k.style.left = startX - (hintW * j) + "px";
+                document.body.appendChild(k)
+            }
+        }
+
+        for(let i = 0; i < y; i++){
+            for(let j = 0; j < x; j++){
+                let a = document.createElement('button');
+                Player[i][j] = a;
+                Player[i][j].addEventListener('click', () => {
+                    if(Player[i][j].style.background === ""){
+                        Player[i][j].style.background = "black";
+                    }else{
+                        Player[i][j].style.background = "";
+                    }
+                    //전부 true면 게임 종료
+                    board[i][j] = !(board[i][j])
+                    kkk();
+                })
+                Player[i][j] = a;
+                a.style.top = startY + (i * btnH) + "px";
+                a.style.left = startX + (j * btnW) + "px";
+                a.style.width = btnW + "px";
+                a.style.height = btnH + "px";
+                document.body.appendChild(a);
+            }
+        }
+        function kkk(){
+            for(let i = 0; i < board.length; i++){
+                for(let j = 0; j <board[i].length; j++){
+                    if(board[i][j] === false){
+                        return 0;
+                    }
+                }
+            }
+            alert('성공')
+        }
+        
+    </script>
+</body>
+</html>
